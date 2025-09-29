@@ -1,22 +1,61 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import 'react-native-reanimated';
+import {
+  DarkTheme,
+  DefaultTheme,
+  ThemeProvider,
+} from "@react-navigation/native";
+import { Stack } from "expo-router";
+import { StatusBar } from "expo-status-bar";
+import "react-native-reanimated";
 
-import { useColorScheme } from '@/hooks/use-color-scheme';
+import { useColorScheme } from "@/hooks/use-color-scheme";
+import { useThemeColor } from "@/hooks/use-theme-color";
 
 export const unstable_settings = {
-  anchor: '(tabs)',
+  anchor: "(tabs)",
 };
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
+  const primaryColor = useThemeColor({}, "primary");
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
+    <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+      <Stack
+        screenOptions={{
+          headerShown: true,
+        }}
+      >
+        {/* Home Screen */}
+        <Stack.Screen name="index" options={{ title: "" }} />
+
+        {/* Transfer Screen */}
+        <Stack.Screen
+          name="transfer"
+          options={{
+            title: "Send Money",
+            presentation: "modal",
+          }}
+        />
+
+        {/* Confirm Screen */}
+        <Stack.Screen
+          name="confirm"
+          options={{
+            title: "Review Transfer",
+            headerBackTitle: "Back",
+          }}
+        />
+
+        {/* Success Screen */}
+        <Stack.Screen
+          name="success"
+          options={{
+            title: "",
+            headerShown: false,
+            presentation: "modal",
+            gestureEnabled: false,
+          }}
+        />
       </Stack>
       <StatusBar style="auto" />
     </ThemeProvider>
