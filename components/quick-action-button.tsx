@@ -3,14 +3,19 @@ import { StyleSheet, Text, TouchableOpacity } from "react-native";
 
 type QuickActionButtonProps = {
   label: string;
+  onPress?: () => void;
 };
 
-export const QuickActionButton = ({ label }: QuickActionButtonProps) => {
+export const QuickActionButton = ({
+  label,
+  onPress,
+}: QuickActionButtonProps) => {
   const primaryColor = useThemeColor({}, "primary");
   return (
     <TouchableOpacity
       style={{ ...styles.container, backgroundColor: primaryColor }}
       activeOpacity={0.8}
+      onPress={onPress}
     >
       <Text style={styles.label}>{label}</Text>
     </TouchableOpacity>

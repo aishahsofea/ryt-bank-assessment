@@ -16,13 +16,14 @@ export const unstable_settings = {
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
-  const primaryColor = useThemeColor({}, "primary");
+  const backgroundColor = useThemeColor({}, "background");
 
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
       <Stack
         screenOptions={{
           headerShown: true,
+          contentStyle: { backgroundColor },
         }}
       >
         {/* Home Screen */}
@@ -34,6 +35,7 @@ export default function RootLayout() {
           options={{
             title: "Send Money",
             presentation: "modal",
+            headerShown: false,
           }}
         />
 

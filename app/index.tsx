@@ -1,13 +1,15 @@
 import { Image } from "expo-image";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 
 import ParallaxScrollView from "@/components/parallax-scroll-view";
 import { QuickActionButton } from "@/components/quick-action-button";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
-import { Link } from "expo-router";
+import { useRouter } from "expo-router";
 
 export default function HomeScreen() {
+  const route = useRouter();
+
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: "#A1CEDC", dark: "#1D3D47" }}
@@ -34,14 +36,16 @@ export default function HomeScreen() {
           Quick Actions:
         </ThemedText>
         <View style={styles.quickActionsContainer}>
-          <QuickActionButton label="Send Money" />
-          <QuickActionButton label="Pay Bills" />
+          <QuickActionButton
+            label="Send Money"
+            onPress={() => route.push("/transfer")}
+          />
+          <QuickActionButton
+            label="Pay Bills"
+            onPress={() => route.navigate("/")}
+          />
         </View>
       </View>
-
-      <Link href="/transfer" asChild>
-        <Text>Transfer</Text>
-      </Link>
     </ParallaxScrollView>
   );
 }
