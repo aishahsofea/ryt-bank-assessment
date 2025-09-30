@@ -29,11 +29,21 @@ export default function RootLayout() {
         {/* Home Screen */}
         <Stack.Screen name="index" options={{ title: "" }} />
 
-        {/* Transfer Screen */}
+        {/* Select Recipient Screen */}
         <Stack.Screen
-          name="transfer"
+          name="select-recipient"
           options={{
             title: "Send Money",
+            presentation: "modal",
+            headerShown: false,
+          }}
+        />
+
+        {/* Amount Screen */}
+        <Stack.Screen
+          name="amount"
+          options={{
+            title: "Amount",
             presentation: "modal",
             headerShown: false,
           }}

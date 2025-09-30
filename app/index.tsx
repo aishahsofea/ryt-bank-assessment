@@ -38,7 +38,7 @@ export default function HomeScreen() {
         <View style={styles.quickActionsContainer}>
           <QuickActionButton
             label="Send Money"
-            onPress={() => route.push("/transfer")}
+            onPress={() => route.push("/select-recipient")}
           />
           <QuickActionButton
             label="Pay Bills"
