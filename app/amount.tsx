@@ -5,12 +5,14 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useState } from "react";
 import {
+  Alert,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 export default function AmountScreen() {
   const color = useThemeColor({}, "text");
@@ -24,6 +26,10 @@ export default function AmountScreen() {
   const [note, setNote] = useState("");
 
   const recipientName = params.recipientName || "Unknown Recipient";
+  const recipientEmail = params.recipientEmail || "Unknown Email";
+  const recipientId = params.recipientId || "Unknown ID";
+
+  const availableBalance = 1234; // TODO: get from gobal state or API
 
   const formatAmount = (value: string) => {
     const cleaned = value.replace(/[^0-9.]/g, "");
@@ -41,12 +47,38 @@ export default function AmountScreen() {
     setAmount(formatAmount(value));
   };
 
-  const handleContinue = () => {};
+  const handleContinue = () => {
+    if (!amount || parseFloat(amount) <= 0) {
+      Alert.alert("Invalid Amount", "Please enter a valid amount.");
+      return;
+    }
 
-  const availableBalance = 1234.0; // TODO: get from gobal state or API
+    if (parseFloat(amount) > availableBalance) {
+      Alert.alert(
+        "Insufficient Balance",
+        "You do not have enough balance for this transfer."
+      );
+      return;
+    }
+
+    route.push({
+      pathname: "/confirm",
+      params: {
+        recipientName,
+        recipientEmail,
+        recipientId,
+        amount,
+        note,
+      },
+    });
+  };
 
   return (
-    <View style={styles.container}>
+    <KeyboardAwareScrollView
+      style={styles.container}
+      contentContainerStyle={{ marginBottom: 100 }}
+      keyboardShouldPersistTaps="handled"
+    >
       <CloseButton />
 
       {/* Recipient Info */}
@@ -136,7 +168,7 @@ export default function AmountScreen() {
           <Ionicons name="arrow-forward" size={20} color={color} />
         </TouchableOpacity>
       </View>
-    </View>
+    </KeyboardAwareScrollView>
   );
 }
 

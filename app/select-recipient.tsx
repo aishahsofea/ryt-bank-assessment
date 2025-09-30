@@ -122,58 +122,6 @@ export default function SelectRecipientScreen() {
 
       <View></View>
 
-      {/* Amount Section */}
-      {/* <View style={styles.section}>
-        <Text style={[styles.sectionLabel, { color }]}>Enter Amount</Text>
-        <View style={[styles.recipientInput, { borderColor: primaryColor }]}>
-          <TextInput
-            placeholder="0.00"
-            keyboardType="decimal-pad"
-            style={[styles.recipientInputText, { color }]}
-          />
-        </View>
-
-        <View style={styles.balanceRow}>
-          <Text style={[styles.balanceLabel, { color }]}>
-            Available Balance
-          </Text>
-          <Text style={[styles.balanceAmount, { color }]}>RM 1234.00</Text>
-        </View>
-      </View> */}
-
-      {/* Note Section */}
-      {/* <View style={styles.section}>
-        <Text style={[styles.sectionLabel, { color }]}>
-          Add a Note (Optional)
-        </Text>
-        <View style={[styles.recipientInput, { borderColor: primaryColor }]}>
-          <TextInput
-            style={[styles.recipientInputText, styles.noteInput, { color }]}
-            placeholder="What's this for?"
-            maxLength={150}
-            multiline
-          />
-        </View>
-        <Text style={[styles.characterCount, { color }]}>0/100</Text>
-      </View> */}
-
-      {/* <View style={{ height: 60 }} />
-
-      <View style={styles.bottomContainer}>
-        <TouchableOpacity style={styles.continueButton}>
-          <Text
-            style={{
-              color,
-              fontSize: 16,
-              fontWeight: "600",
-              letterSpacing: 1,
-            }}
-          >
-            Continue
-          </Text>
-        </TouchableOpacity>
-      </View> */}
-
       <FlatList
         contentContainerStyle={styles.recipientsContainer}
         data={RECENT_RECIPIENTS}
@@ -214,38 +162,6 @@ const styles = StyleSheet.create({
   recipientInputText: {
     flex: 1,
     fontSize: 16,
-  },
-  balanceRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginTop: 32,
-    alignItems: "center",
-    paddingBottom: 40,
-  },
-  balanceLabel: {
-    fontSize: 20,
-  },
-  balanceAmount: {
-    fontSize: 24,
-    fontWeight: "600",
-  },
-  characterCount: {
-    textAlign: "right",
-    marginTop: 4,
-  },
-  noteInput: {
-    minHeight: 120,
-  },
-  bottomContainer: {
-    paddingHorizontal: 16,
-    paddingVertical: 46,
-  },
-  continueButton: {
-    backgroundColor: "blue",
-    paddingVertical: 16,
-    borderRadius: 40,
-    alignItems: "center",
-    justifyContent: "center",
   },
   recipientsContainer: {
     marginTop: 32,

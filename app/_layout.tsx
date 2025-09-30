@@ -55,6 +55,7 @@ export default function RootLayout() {
           options={{
             title: "Review Transfer",
             headerBackTitle: "Back",
+            headerShown: false,
           }}
         />
 
