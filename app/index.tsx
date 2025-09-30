@@ -1,40 +1,35 @@
-import { Image } from "expo-image";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
-import ParallaxScrollView from "@/components/parallax-scroll-view";
 import { QuickActionButton } from "@/components/quick-action-button";
-import { ThemedText } from "@/components/themed-text";
-import { ThemedView } from "@/components/themed-view";
+import { useThemeColor } from "@/hooks/use-theme-color";
+import { useAccountStore } from "@/stores/useAccountStore";
 import { useRouter } from "expo-router";
 
 export default function HomeScreen() {
   const route = useRouter();
 
-  return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: "#A1CEDC", dark: "#1D3D47" }}
-      headerImage={
-        <Image
-          source={require("@/assets/images/partial-react-logo.png")}
-          style={styles.reactLogo}
-        />
-      }
-    >
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Hi, John!</ThemedText>
-      </ThemedView>
+  const color = useThemeColor({}, "text");
 
-      <View>
-        <ThemedText type="subtitle" style={{ marginBottom: 8 }}>
-          Account Balance
-        </ThemedText>
-        <ThemedText>RM 1234</ThemedText>
+  const balance = useAccountStore((state) => state.balance);
+  const accountHolderName = useAccountStore((state) => state.accountHolderName);
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.titleContainer}>
+        <Text style={[styles.titleText, { color }]}>
+          Hi, {accountHolderName}!
+        </Text>
       </View>
 
       <View>
-        <ThemedText type="subtitle" style={{ marginBottom: 8 }}>
-          Quick Actions:
-        </ThemedText>
+        <Text style={[styles.labelText, { color }]}>Account Balance</Text>
+        <Text style={[styles.balanceText, { color }]}>
+          RM {balance.toFixed(2)}
+        </Text>
+      </View>
+
+      <View>
+        <Text style={[styles.labelText, { color }]}>Quick Actions:</Text>
         <View style={styles.quickActionsContainer}>
           <QuickActionButton
             label="Send Money"
@@ -46,26 +41,34 @@ export default function HomeScreen() {
           />
         </View>
       </View>
-    </ParallaxScrollView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+  },
   titleContainer: {
     flexDirection: "row",
     alignItems: "center",
     gap: 8,
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
+  titleText: {
+    fontSize: 36,
+    fontWeight: "600",
+    marginBottom: 16,
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: "absolute",
+  labelText: {
+    fontSize: 18,
+    fontWeight: "500",
+    marginBottom: 4,
+  },
+  balanceText: {
+    fontWeight: "600",
+    fontSize: 36,
+    marginBottom: 24,
   },
   quickActionsContainer: {
     flexDirection: "row",

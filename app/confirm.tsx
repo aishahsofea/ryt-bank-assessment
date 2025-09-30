@@ -3,21 +3,55 @@ import { CloseButton } from "@/components/close-button";
 import { RecipientCard } from "@/components/recipient-card";
 import { ConfirmBottomButton } from "@/components/ui/confirm-bottom-button";
 import { useThemeColor } from "@/hooks/use-theme-color";
+import { Transaction, useAccountStore } from "@/stores/useAccountStore";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { useLocalSearchParams } from "expo-router";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import { Alert, ScrollView, StyleSheet, Text, View } from "react-native";
 
 export default function ConfirmScreen() {
   const color = useThemeColor({}, "text");
   const primaryColor = useThemeColor({}, "primary");
 
   const params = useLocalSearchParams();
+  const route = useRouter();
 
-  const recipientName = params.recipientName || "Unknown Recipient";
-  const recipientEmail = params.recipientEmail || "Unknown Email";
-  const recipientId = params.recipientId || "Unknown ID";
-  const amount = params.amount || "0";
-  const note = params.note || "";
+  const recipientName = String(params.recipientName) || "Unknown Recipient";
+  const recipientEmail = String(params.recipientEmail) || "Unknown Email";
+  const recipientId = String(params.recipientId) || "Unknown ID";
+  const amount = Number(params.amount || "0");
+  const note = String(params.note) || "";
+
+  const deductBalance = useAccountStore((state) => state.deductBalance);
+  const addTransaction = useAccountStore((state) => state.addTransaction);
+  const updateTxnStatus = useAccountStore(
+    (state) => state.updateTransactionStatus
+  );
+
+  const handleConfirm = () => {
+    const success = deductBalance(amount);
+
+    if (!success) {
+      Alert.alert("Transaction Failed", "Insufficient balance.");
+      return;
+    }
+
+    const newTransaction: Omit<Transaction, "id" | "date" | "status"> = {
+      recipientId,
+      recipientName,
+      recipientEmail,
+      amount,
+      note,
+      type: "sent",
+    };
+
+    const txnId = addTransaction(newTransaction);
+
+    setTimeout(() => {
+      updateTxnStatus(txnId, "completed");
+
+      route.replace("/success");
+    }, 100);
+  };
 
   return (
     <ScrollView
@@ -39,7 +73,7 @@ export default function ConfirmScreen() {
       <View style={[styles.amountHero, { borderColor: primaryColor }]}>
         <Text style={styles.amountLabel}>You're sending</Text>
         <Text style={[styles.amountLarge, { color: primaryColor }]}>
-          RM {parseFloat(String(amount)).toFixed(2)}
+          RM {amount.toFixed(2)}
         </Text>
         {note && (
           <View style={styles.noteDisplay}>
@@ -56,9 +90,12 @@ export default function ConfirmScreen() {
         recipientEmail={String(recipientEmail)}
       />
 
-      <BalanceCard />
+      <BalanceCard transferAmount={amount} />
 
-      <ConfirmBottomButton isProcessing={false} onPressConfirm={() => {}} />
+      <ConfirmBottomButton
+        isProcessing={false}
+        onPressConfirm={handleConfirm}
+      />
     </ScrollView>
   );
 }

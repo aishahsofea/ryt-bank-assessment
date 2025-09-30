@@ -1,14 +1,19 @@
 import { useThemeColor } from "@/hooks/use-theme-color";
+import { useAccountStore } from "@/stores/useAccountStore";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { StyleSheet, Text, View } from "react-native";
 
-export const BalanceCard = () => {
+type BalanceCardProps = {
+  transferAmount: number;
+};
+
+export const BalanceCard = ({ transferAmount }: BalanceCardProps) => {
   const color = useThemeColor({}, "text");
   const primaryColor = useThemeColor({}, "primary");
   const secondaryTextColor = useThemeColor({}, "secondaryText");
 
-  const availableBalance = 1234; // TODO: get from global state or API
-  const newBalance = availableBalance - 100; // Example deduction, replace with actual amount
+  const availableBalance = useAccountStore((state) => state.balance);
+  const newBalance = availableBalance - (transferAmount || 0);
 
   return (
     <View style={[styles.balanceCard, { backgroundColor: color }]}>

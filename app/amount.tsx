@@ -1,6 +1,7 @@
 import { CloseButton } from "@/components/close-button";
 import { theme } from "@/constants/theme";
 import { useThemeColor } from "@/hooks/use-theme-color";
+import { useAccountStore } from "@/stores/useAccountStore";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useState } from "react";
@@ -29,7 +30,7 @@ export default function AmountScreen() {
   const recipientEmail = params.recipientEmail || "Unknown Email";
   const recipientId = params.recipientId || "Unknown ID";
 
-  const availableBalance = 1234; // TODO: get from gobal state or API
+  const availableBalance = useAccountStore((state) => state.balance);
 
   const formatAmount = (value: string) => {
     const cleaned = value.replace(/[^0-9.]/g, "");
