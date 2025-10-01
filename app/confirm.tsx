@@ -4,6 +4,7 @@ import { RecipientCard } from "@/components/recipient-card";
 import { ConfirmBottomButton } from "@/components/ui/confirm-bottom-button";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import { Transaction, useAccountStore } from "@/stores/useAccountStore";
+import { useRecipientStore } from "@/stores/useRecipientStore";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useState } from "react";
@@ -17,8 +18,6 @@ export default function ConfirmScreen() {
   const route = useRouter();
   const [isProcessing, setIsProcessing] = useState(false);
 
-  const recipientName = String(params.recipientName) || "Unknown Recipient";
-  const recipientEmail = String(params.recipientEmail) || "Unknown Email";
   const recipientId = String(params.recipientId) || "Unknown ID";
   const amount = Number(params.amount || "0");
   const note = String(params.note) || "";
@@ -28,6 +27,11 @@ export default function ConfirmScreen() {
   const updateTxnStatus = useAccountStore(
     (state) => state.updateTransactionStatus
   );
+  const getRecipientById = useRecipientStore((state) => state.getRecipientById);
+
+  const recipient = getRecipientById(recipientId);
+  const recipientName = recipient?.name || "Unknown";
+  const recipientEmail = recipient?.email || "Unknown";
 
   const handleConfirm = () => {
     setIsProcessing(true);

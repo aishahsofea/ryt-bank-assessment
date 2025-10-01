@@ -1,16 +1,10 @@
 import { CloseButton } from "@/components/close-button";
 import { RecipientItem } from "@/components/recipient-item";
 import { useThemeColor } from "@/hooks/use-theme-color";
+import { useRecipientStore } from "@/stores/useRecipientStore";
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import {
-  Alert,
-  FlatList,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from "react-native";
+import { FlatList, StyleSheet, Text, TextInput, View } from "react-native";
 
 export type Recipient = {
   id: string;
@@ -19,37 +13,6 @@ export type Recipient = {
   email: string;
   accountType?: string;
 };
-
-const RECENT_RECIPIENTS: Recipient[] = [
-  {
-    id: "1",
-    name: "Sarah Chen",
-    initials: "SC",
-    email: "sarah.chen@email.com",
-    accountType: "Bank account ending in 1234",
-  },
-  {
-    id: "2",
-    name: "Mike Johnson",
-    initials: "MJ",
-    email: "mike.j@email.com",
-    accountType: "Bank account ending in 5678",
-  },
-  {
-    id: "3",
-    name: "Emily Davis",
-    initials: "ED",
-    email: "emily.d@email.com",
-    accountType: "Bank account ending in 9012",
-  },
-  {
-    id: "4",
-    name: "James Wilson",
-    initials: "JW",
-    email: "james.w@email.com",
-    accountType: "Bank account ending in 3456",
-  },
-];
 
 export default function SelectRecipientScreen() {
   const route = useRouter();
@@ -61,27 +24,12 @@ export default function SelectRecipientScreen() {
   const [amount, setAmount] = useState("");
   const [note, setNote] = useState("");
 
-  const handleContinue = () => {
-    if (!recipient) {
-      Alert.alert("Please select a recipient.");
-      return;
-    }
+  const recipients = useRecipientStore((state) => state.recipients);
+  const searchRecipients = useRecipientStore((state) => state.searchRecipients);
 
-    if (!amount || parseFloat(amount) <= 0) {
-      Alert.alert("Please enter a valid amount.");
-      return;
-    }
-
-    route.push({
-      pathname: "/confirm",
-      params: {
-        recipientName: recipient.name,
-        recipientEmail: recipient.email,
-        amount,
-        note,
-      },
-    });
-  };
+  const filteredRecipients = searchQuery
+    ? searchRecipients(searchQuery)
+    : recipients;
 
   const handleSelectRecipient = (recipient: Recipient) => {
     setRecipient(recipient);
@@ -89,8 +37,6 @@ export default function SelectRecipientScreen() {
       pathname: "/amount",
       params: {
         recipientId: recipient.id,
-        recipientName: recipient.name,
-        recipientEmail: recipient.email,
       },
     });
   };
@@ -124,7 +70,7 @@ export default function SelectRecipientScreen() {
 
       <FlatList
         contentContainerStyle={styles.recipientsContainer}
-        data={RECENT_RECIPIENTS}
+        data={filteredRecipients}
         renderItem={({ item }) => (
           <RecipientItem item={item} onPress={handleSelectRecipient} />
         )}
