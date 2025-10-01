@@ -6,6 +6,7 @@ import { useThemeColor } from "@/hooks/use-theme-color";
 import { Transaction, useAccountStore } from "@/stores/useAccountStore";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useLocalSearchParams, useRouter } from "expo-router";
+import { useState } from "react";
 import { Alert, ScrollView, StyleSheet, Text, View } from "react-native";
 
 export default function ConfirmScreen() {
@@ -14,6 +15,7 @@ export default function ConfirmScreen() {
 
   const params = useLocalSearchParams();
   const route = useRouter();
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const recipientName = String(params.recipientName) || "Unknown Recipient";
   const recipientEmail = String(params.recipientEmail) || "Unknown Email";
@@ -28,6 +30,7 @@ export default function ConfirmScreen() {
   );
 
   const handleConfirm = () => {
+    setIsProcessing(true);
     const success = deductBalance(amount);
 
     if (!success) {
@@ -46,10 +49,20 @@ export default function ConfirmScreen() {
 
     const txnId = addTransaction(newTransaction);
 
+    // TODO: Trigger biometrics auth here
     setTimeout(() => {
+      setIsProcessing(false);
       updateTxnStatus(txnId, "completed");
 
-      route.replace("/success");
+      route.replace({
+        pathname: "/success",
+        params: {
+          txnId,
+          amount,
+          recipientName,
+          date: new Date().toISOString(),
+        },
+      });
     }, 100);
   };
 
@@ -93,7 +106,7 @@ export default function ConfirmScreen() {
       <BalanceCard transferAmount={amount} />
 
       <ConfirmBottomButton
-        isProcessing={false}
+        isProcessing={isProcessing}
         onPressConfirm={handleConfirm}
       />
     </ScrollView>
