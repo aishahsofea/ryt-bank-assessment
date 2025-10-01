@@ -27,7 +27,10 @@ export default function RootLayout() {
         }}
       >
         {/* Home Screen */}
-        <Stack.Screen name="index" options={{ title: "" }} />
+        <Stack.Screen
+          name="index"
+          options={{ title: "", headerShown: false }}
+        />
 
         {/* Select Recipient Screen */}
         <Stack.Screen
@@ -53,8 +56,7 @@ export default function RootLayout() {
         <Stack.Screen
           name="confirm"
           options={{
-            title: "Review Transfer",
-            headerBackTitle: "Back",
+            presentation: "modal",
             headerShown: false,
           }}
         />

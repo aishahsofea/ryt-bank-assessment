@@ -1,42 +1,30 @@
 import { useThemeColor } from "@/hooks/use-theme-color";
-import { useAccountStore } from "@/stores/useAccountStore";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 type BalanceCardProps = {
-  transferAmount: number;
+  balance: number;
 };
 
-export const BalanceCard = ({ transferAmount }: BalanceCardProps) => {
-  const color = useThemeColor({}, "text");
+export const BalanceCard = ({ balance }: BalanceCardProps) => {
   const primaryColor = useThemeColor({}, "primary");
-  const secondaryTextColor = useThemeColor({}, "secondaryText");
-
-  const availableBalance = useAccountStore((state) => state.balance);
-  const newBalance = availableBalance - (transferAmount || 0);
+  const color = useThemeColor({}, "text");
 
   return (
-    <View style={[styles.balanceCard, { backgroundColor: color }]}>
-      <View style={styles.balanceComparison}>
-        <View>
-          <Text style={[styles.balanceLabel, { color: secondaryTextColor }]}>
-            Current balance
-          </Text>
-          <Text style={[styles.balanceAmount, { color: primaryColor }]}>
-            RM {availableBalance.toFixed(2)}
-          </Text>
-        </View>
+    <View style={[styles.balanceCard, { backgroundColor: primaryColor }]}>
+      <Text style={[styles.balanceLabel, { color }]}>Account Balance</Text>
+      <Text style={[styles.balanceAmount, { color }]}>
+        RM {balance.toFixed(2)}
+      </Text>
 
-        <Ionicons name="arrow-forward" size={24} color={primaryColor} />
-
-        <View>
-          <Text style={[styles.balanceLabel, { color: secondaryTextColor }]}>
-            After transfer
-          </Text>
-          <Text style={[styles.balanceAmount, { color: primaryColor }]}>
-            RM {newBalance.toFixed(2)}
-          </Text>
+      <View style={styles.cardFooter}>
+        <View style={styles.cardInfo}>
+          <Ionicons name="card-outline" size={16} color={color} />
+          <Text style={[styles.cardInfoText, { color }]}>**** 7890</Text>
         </View>
+        <TouchableOpacity style={styles.eyeButton}>
+          <Ionicons name="eye-outline" size={18} color={color} />
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -44,25 +32,41 @@ export const BalanceCard = ({ transferAmount }: BalanceCardProps) => {
 
 const styles = StyleSheet.create({
   balanceCard: {
-    borderRadius: 12,
-    padding: 20,
-    marginBottom: 16,
-    borderWidth: 1,
-    borderColor: "#BFDBFE",
+    marginBottom: 24,
+    padding: 24,
+    borderRadius: 20,
+    shadowColor: "#4F46E5",
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.2,
+    shadowRadius: 16,
+    elevation: 8,
   },
-  balanceComparison: {
+  balanceLabel: {
+    fontSize: 16,
+    marginBottom: 4,
+    fontWeight: "500",
+  },
+  balanceAmount: {
+    fontSize: 40,
+    fontWeight: "700",
+    letterSpacing: -1,
+    marginBottom: 10,
+  },
+  cardFooter: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
   },
-  balanceLabel: {
-    fontSize: 12,
-    color: "#6B7280",
-    marginBottom: 6,
+  cardInfo: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
+  cardInfoText: {
+    fontSize: 14,
     fontWeight: "500",
   },
-  balanceAmount: {
-    fontSize: 18,
-    fontWeight: "700",
+  eyeButton: {
+    padding: 4,
   },
 });

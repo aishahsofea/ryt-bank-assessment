@@ -1,54 +1,87 @@
-import { StyleSheet, Text, View } from "react-native";
+import {
+  FlatList,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
+import { BalanceCard } from "@/components/balance-card";
+import { GreetingHeader } from "@/components/greeting-header";
 import { QuickActionButton } from "@/components/quick-action-button";
+import { TransactionItem } from "@/components/txn-item";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import { useAccountStore } from "@/stores/useAccountStore";
 import { useRouter } from "expo-router";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function HomeScreen() {
   const route = useRouter();
 
   const color = useThemeColor({}, "text");
+  const primaryColor = useThemeColor({}, "primary");
 
   const balance = useAccountStore((state) => state.balance);
-  const accountHolderName = useAccountStore((state) => state.accountHolderName);
+  const getRecentTxns = useAccountStore((state) => state.getRecentTransactions);
+
+  const recentTxns = getRecentTxns(10);
+  console.log(JSON.stringify(recentTxns, null, 2));
 
   return (
-    <View style={styles.container}>
-      <View style={styles.titleContainer}>
-        <Text style={[styles.titleText, { color }]}>
-          Hi, {accountHolderName}!
-        </Text>
-      </View>
+    <SafeAreaView style={styles.container} edges={["top", "bottom"]}>
+      <GreetingHeader />
 
-      <View>
-        <Text style={[styles.labelText, { color }]}>Account Balance</Text>
-        <Text style={[styles.balanceText, { color }]}>
-          RM {balance.toFixed(2)}
-        </Text>
-      </View>
+      <BalanceCard balance={balance} />
 
-      <View>
-        <Text style={[styles.labelText, { color }]}>Quick Actions:</Text>
+      <View style={styles.section}>
+        <Text style={[styles.sectionTitle, { color }]}>
+          What would you like to do today?
+        </Text>
         <View style={styles.quickActionsContainer}>
           <QuickActionButton
             label="Send Money"
+            icon="send"
             onPress={() => route.push("/select-recipient")}
           />
           <QuickActionButton
             label="Pay Bills"
+            icon="cash"
             onPress={() => route.navigate("/")}
           />
         </View>
       </View>
-    </View>
+
+      <View style={[styles.section, { flex: 1 }]}>
+        <View style={styles.transactionHeader}>
+          <Text style={[styles.sectionTitle, { color }]}>
+            Recent Transactions
+          </Text>
+          {recentTxns.length > 0 && (
+            <TouchableOpacity>
+              <Text style={[styles.seeAllButton, { color: primaryColor }]}>
+                See All
+              </Text>
+            </TouchableOpacity>
+          )}
+        </View>
+
+        {recentTxns.length > 0 && (
+          <FlatList
+            data={recentTxns}
+            renderItem={({ item }) => <TransactionItem transaction={item} />}
+            showsVerticalScrollIndicator={false}
+          />
+        )}
+      </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    paddingHorizontal: 24,
+    marginBottom: 30,
   },
   titleContainer: {
     flexDirection: "row",
@@ -60,10 +93,24 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     marginBottom: 16,
   },
-  labelText: {
-    fontSize: 18,
-    fontWeight: "500",
-    marginBottom: 4,
+  section: {
+    marginBottom: 24,
+    gap: 16,
+  },
+  sectionHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: 20,
+    marginBottom: 16,
+  },
+  sectionTitle: {
+    fontSize: 16,
+    fontWeight: "600",
+  },
+  seeAllButton: {
+    fontSize: 14,
+    fontWeight: "600",
   },
   balanceText: {
     fontWeight: "600",
@@ -72,6 +119,12 @@ const styles = StyleSheet.create({
   },
   quickActionsContainer: {
     flexDirection: "row",
-    gap: 8,
+    gap: 16,
+  },
+  transactionHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 16,
   },
 });

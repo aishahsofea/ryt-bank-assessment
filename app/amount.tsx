@@ -2,6 +2,7 @@ import { CloseButton } from "@/components/close-button";
 import { theme } from "@/constants/theme";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import { useAccountStore } from "@/stores/useAccountStore";
+import { useRecipientStore } from "@/stores/useRecipientStore";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useState } from "react";
@@ -26,11 +27,13 @@ export default function AmountScreen() {
   const [amount, setAmount] = useState("");
   const [note, setNote] = useState("");
 
-  const recipientName = params.recipientName || "Unknown Recipient";
-  const recipientEmail = params.recipientEmail || "Unknown Email";
   const recipientId = params.recipientId || "Unknown ID";
 
   const availableBalance = useAccountStore((state) => state.balance);
+  const getRecipientById = useRecipientStore((state) => state.getRecipientById);
+
+  const recipient = getRecipientById(recipientId as string);
+  const recipientName = recipient?.name || "Unknown";
 
   const formatAmount = (value: string) => {
     const cleaned = value.replace(/[^0-9.]/g, "");
@@ -65,8 +68,6 @@ export default function AmountScreen() {
     route.push({
       pathname: "/confirm",
       params: {
-        recipientName,
-        recipientEmail,
         recipientId,
         amount,
         note,

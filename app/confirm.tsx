@@ -1,4 +1,4 @@
-import { BalanceCard } from "@/components/balance-card";
+import { BalanceComparisonCard } from "@/components/balance-comparison-card";
 import { CloseButton } from "@/components/close-button";
 import { RecipientCard } from "@/components/recipient-card";
 import { ConfirmBottomButton } from "@/components/ui/confirm-bottom-button";
@@ -107,7 +107,7 @@ export default function ConfirmScreen() {
         recipientEmail={String(recipientEmail)}
       />
 
-      <BalanceCard transferAmount={amount} />
+      <BalanceComparisonCard transferAmount={amount} />
 
       <ConfirmBottomButton
         isProcessing={isProcessing}
