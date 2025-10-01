@@ -2,7 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
-export interface Recipient {
+export type Recipient = {
   id: string;
   name: string;
   email: string;
@@ -11,9 +11,9 @@ export interface Recipient {
   lastTransactionDate?: string;
   totalTransactions: number;
   isFavorite: boolean;
-}
+};
 
-interface RecipientState {
+type RecipientState = {
   recipients: Recipient[];
 
   addRecipient: (
@@ -27,7 +27,7 @@ interface RecipientState {
   toggleFavorite: (id: string) => void;
   incrementTransactionCount: (id: string) => void;
   searchRecipients: (query: string) => Recipient[];
-}
+};
 
 const ONE_DAY = 24 * 60 * 60 * 1000;
 
