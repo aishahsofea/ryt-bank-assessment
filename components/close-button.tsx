@@ -11,8 +11,13 @@ export const CloseButton = () => {
       style={styles.closeButton}
       activeOpacity={0.8}
       onPress={() => route.back()}
+      hitSlop={20}
     >
-      <Ionicons name="close-circle" size={32} color={theme.colorPrimary} />
+      <Ionicons
+        name="close-circle-outline"
+        size={32}
+        color={theme.colorPrimary}
+      />
     </TouchableOpacity>
   );
 };

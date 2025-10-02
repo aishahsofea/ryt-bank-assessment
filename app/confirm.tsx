@@ -8,6 +8,7 @@ import { useTransferMutation } from "@/hooks/use-transfer-mutation";
 import { useAccountStore } from "@/stores/useAccountStore";
 import { useRecipientStore } from "@/stores/useRecipientStore";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import * as Haptics from "expo-haptics";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { Alert, ScrollView, StyleSheet, Text, View } from "react-native";
 
@@ -36,6 +37,8 @@ export default function ConfirmScreen() {
 
   const handleConfirm = async () => {
     if (isTransferPending) return;
+
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
 
     if (isBiometricAvailable) {
       const authResult = await authenticate(

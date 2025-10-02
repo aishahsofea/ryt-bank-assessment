@@ -1,5 +1,7 @@
 import { theme } from "@/constants/theme";
+import { useAccountStore } from "@/stores/useAccountStore";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 type BalanceCardProps = {
@@ -7,6 +9,11 @@ type BalanceCardProps = {
 };
 
 export const BalanceCard = ({ balance }: BalanceCardProps) => {
+  const [isMasked, setIsMasked] = useState(true);
+
+  const accountNumber = useAccountStore((state) => state.accountNumber);
+  const maskedAccountNumber = `**** ${accountNumber.slice(-4)}`;
+
   return (
     <View style={[styles.balanceCard]}>
       <Text style={styles.balanceLabel}>Account Balance</Text>
@@ -19,11 +26,16 @@ export const BalanceCard = ({ balance }: BalanceCardProps) => {
             size={16}
             color={theme.colorTextPrimary}
           />
-          <Text style={styles.cardInfoText}>**** 7890</Text>
+          <Text style={styles.cardInfoText}>
+            {isMasked ? maskedAccountNumber : accountNumber}
+          </Text>
         </View>
-        <TouchableOpacity style={styles.eyeButton}>
+        <TouchableOpacity
+          style={styles.eyeButton}
+          onPress={() => setIsMasked(!isMasked)}
+        >
           <Ionicons
-            name="eye-outline"
+            name={isMasked ? "eye-off-outline" : "eye-outline"}
             size={18}
             color={theme.colorTextPrimary}
           />

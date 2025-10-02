@@ -3,6 +3,7 @@ import { theme } from "@/constants/theme";
 import { useAccountStore } from "@/stores/useAccountStore";
 import { useRecipientStore } from "@/stores/useRecipientStore";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import * as Haptics from "expo-haptics";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useState } from "react";
 import {
@@ -47,6 +48,8 @@ export default function AmountScreen() {
   };
 
   const handleContinue = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+
     if (!amount || parseFloat(amount) <= 0) {
       Alert.alert("Invalid Amount", "Please enter a valid amount.");
       return;
@@ -97,7 +100,7 @@ export default function AmountScreen() {
           <TextInput
             style={styles.amountInput}
             placeholder="0.00"
-            placeholderTextColor="#D1D5DB"
+            placeholderTextColor={theme.colorDisabledGrey}
             keyboardType="decimal-pad"
             returnKeyType="done"
             value={amount}
@@ -111,7 +114,11 @@ export default function AmountScreen() {
       {/* Balance Display */}
       <View style={styles.balanceContainer}>
         <View style={styles.balanceRow}>
-          <Ionicons name="wallet-outline" size={20} color="#10B981" />
+          <Ionicons
+            name="wallet-outline"
+            size={20}
+            color={theme.colorSuccessBackground}
+          />
           <Text style={styles.balanceLabel}>Available Balance</Text>
         </View>
         <Text style={styles.balanceAmount}>
@@ -126,13 +133,15 @@ export default function AmountScreen() {
         <View
           style={[
             styles.noteInputContainer,
-            { borderColor: note ? theme.colorPrimary : "#E5E7EB" },
+            {
+              borderColor: note ? theme.colorPrimary : theme.colorDisabledGrey,
+            },
           ]}
         >
           <TextInput
             style={styles.noteInput}
             placeholder="Add a note or message"
-            placeholderTextColor="#9CA3AF"
+            placeholderTextColor={theme.colorTextSecondary}
             value={note}
             onChangeText={setNote}
             multiline
@@ -285,6 +294,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginTop: 8,
     textAlign: "right",
+    color: theme.colorTextPrimary,
   },
   buttonContainer: {
     paddingVertical: 24,

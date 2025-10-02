@@ -1,6 +1,7 @@
 import { SuccessfulTxnCard } from "@/components/successful-txn-card";
 import { theme } from "@/constants/theme";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import * as Haptics from "expo-haptics";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useRef } from "react";
 import {
@@ -26,6 +27,7 @@ export default function SuccessScreen() {
   const route = useRouter();
 
   const handleDone = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     route.dismissAll();
     route.replace("/");
   };

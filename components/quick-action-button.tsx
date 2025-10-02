@@ -1,5 +1,6 @@
 import { theme } from "@/constants/theme";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import * as Haptics from "expo-haptics";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 type QuickActionButtonProps = {
@@ -16,7 +17,10 @@ export const QuickActionButton = ({
   return (
     <TouchableOpacity
       style={styles.container}
-      onPress={onPress}
+      onPress={() => {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+        onPress?.();
+      }}
       activeOpacity={0.7}
     >
       <View style={styles.iconContainer}>

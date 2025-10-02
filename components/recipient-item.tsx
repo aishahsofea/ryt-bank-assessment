@@ -1,6 +1,7 @@
 import { Recipient } from "@/app/select-recipient";
 import { theme } from "@/constants/theme";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import * as Haptics from "expo-haptics";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 type RecipientItemProps = {
@@ -13,7 +14,10 @@ export const RecipientItem = ({ item, onPress }: RecipientItemProps) => {
     <TouchableOpacity
       style={styles.recipientItem}
       activeOpacity={0.7}
-      onPress={() => onPress?.(item)}
+      onPress={() => {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+        onPress?.(item);
+      }}
     >
       <View style={styles.recipientInfo}>
         <View style={styles.avatar}>
@@ -24,7 +28,7 @@ export const RecipientItem = ({ item, onPress }: RecipientItemProps) => {
           <Text style={styles.recipientAccount}>{item.accountType}</Text>
         </View>
       </View>
-      <Ionicons name="chevron-forward" size={20} color="#9CA3AF" />
+      <Ionicons name="chevron-forward" size={20} color={theme.colorPrimary} />
     </TouchableOpacity>
   );
 };
