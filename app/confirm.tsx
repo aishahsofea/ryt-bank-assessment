@@ -3,11 +3,11 @@ import { CloseButton } from "@/components/close-button";
 import { RecipientCard } from "@/components/recipient-card";
 import { ConfirmBottomButton } from "@/components/ui/confirm-bottom-button";
 import { useThemeColor } from "@/hooks/use-theme-color";
-import { Transaction, useAccountStore } from "@/stores/useAccountStore";
+import { useTransferMutation } from "@/hooks/use-transfer-mutation";
+import { useAccountStore } from "@/stores/useAccountStore";
 import { useRecipientStore } from "@/stores/useRecipientStore";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { useState } from "react";
 import { Alert, ScrollView, StyleSheet, Text, View } from "react-native";
 
 export default function ConfirmScreen() {
@@ -16,7 +16,6 @@ export default function ConfirmScreen() {
 
   const params = useLocalSearchParams();
   const route = useRouter();
-  const [isProcessing, setIsProcessing] = useState(false);
 
   const recipientId = String(params.recipientId) || "Unknown ID";
   const amount = Number(params.amount || "0");
@@ -27,47 +26,48 @@ export default function ConfirmScreen() {
   const updateTxnStatus = useAccountStore(
     (state) => state.updateTransactionStatus
   );
-  const getRecipientById = useRecipientStore((state) => state.getRecipientById);
 
+  const getRecipientById = useRecipientStore((state) => state.getRecipientById);
   const recipient = getRecipientById(recipientId);
   const recipientName = recipient?.name || "Unknown";
   const recipientEmail = recipient?.email || "Unknown";
 
+  const { mutate: transfer, isPending: isTransferPending } =
+    useTransferMutation();
+
   const handleConfirm = () => {
-    setIsProcessing(true);
-    const success = deductBalance(amount);
+    if (isTransferPending) return;
 
-    if (!success) {
-      Alert.alert("Transaction Failed", "Insufficient balance.");
-      return;
-    }
-
-    const newTransaction: Omit<Transaction, "id" | "date" | "status"> = {
-      recipientId,
-      recipientName,
-      recipientEmail,
-      amount,
-      note,
-      type: "sent",
-    };
-
-    const txnId = addTransaction(newTransaction);
-
-    // TODO: Trigger biometrics auth here
-    setTimeout(() => {
-      setIsProcessing(false);
-      updateTxnStatus(txnId, "completed");
-
-      route.replace({
-        pathname: "/success",
-        params: {
-          txnId,
-          amount,
-          recipientName,
-          date: new Date().toISOString(),
+    transfer(
+      {
+        recipientId,
+        recipientName,
+        recipientEmail,
+        amount,
+        note,
+      },
+      {
+        onSuccess: (response) => {
+          route.replace({
+            pathname: "/success",
+            params: {
+              txnId: response.transactionId,
+              amount,
+              recipientName,
+              date: new Date().toISOString(),
+            },
+          });
         },
-      });
-    }, 100);
+        onError: (error: any) => {
+          const errorMessage =
+            error.response?.message ||
+            error.message ||
+            "An unknown error occurred";
+
+          Alert.alert("Transfer Failed", errorMessage);
+        },
+      }
+    );
   };
 
   return (
@@ -110,7 +110,7 @@ export default function ConfirmScreen() {
       <BalanceComparisonCard transferAmount={amount} />
 
       <ConfirmBottomButton
-        isProcessing={isProcessing}
+        isProcessing={isTransferPending}
         onPressConfirm={handleConfirm}
       />
     </ScrollView>

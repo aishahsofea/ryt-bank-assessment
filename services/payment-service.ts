@@ -1,4 +1,4 @@
-type TransferRequest = {
+export type TransferRequest = {
   recipientId: string;
   recipientName: string;
   recipientEmail: string;

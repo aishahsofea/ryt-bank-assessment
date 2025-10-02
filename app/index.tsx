@@ -25,7 +25,6 @@ export default function HomeScreen() {
   const getRecentTxns = useAccountStore((state) => state.getRecentTransactions);
 
   const recentTxns = getRecentTxns(10);
-  console.log(JSON.stringify(recentTxns, null, 2));
 
   return (
     <SafeAreaView style={styles.container} edges={["top", "bottom"]}>
