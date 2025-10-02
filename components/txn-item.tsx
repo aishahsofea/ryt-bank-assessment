@@ -1,13 +1,20 @@
 import { theme } from "@/constants/theme";
 import { Transaction } from "@/stores/useAccountStore";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { StyleSheet, Text, View } from "react-native";
+import * as Haptics from "expo-haptics";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 type TransactionItemProps = {
   transaction: Transaction;
+  onPress?: (transaction: Transaction) => void;
+  showResendIcon?: boolean;
 };
 
-export const TransactionItem = ({ transaction }: TransactionItemProps) => {
+export const TransactionItem = ({
+  transaction,
+  onPress,
+  showResendIcon,
+}: TransactionItemProps) => {
   const isReceived = transaction.type === "received";
   const amount = transaction.amount;
 
@@ -33,7 +40,16 @@ export const TransactionItem = ({ transaction }: TransactionItemProps) => {
   };
 
   return (
-    <View style={styles.transactionItem}>
+    <TouchableOpacity
+      style={styles.transactionItem}
+      onPress={() => {
+        if (onPress) {
+          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+          onPress(transaction);
+        }
+      }}
+      activeOpacity={0.8}
+    >
       <View style={styles.transactionLeft}>
         <View
           style={[
@@ -68,7 +84,15 @@ export const TransactionItem = ({ transaction }: TransactionItemProps) => {
       >
         {isReceived ? "+" : "-"}RM {amount.toFixed(2)}
       </Text>
-    </View>
+      {showResendIcon && (
+        <Ionicons
+          name="refresh"
+          size={16}
+          color={theme.colorTextPrimary}
+          style={styles.resendIcon}
+        />
+      )}
+    </TouchableOpacity>
   );
 };
 
@@ -112,5 +136,8 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: "700",
     marginLeft: 8,
+  },
+  resendIcon: {
+    paddingLeft: 8,
   },
 });

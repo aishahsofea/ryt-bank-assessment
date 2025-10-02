@@ -1,10 +1,4 @@
-import {
-  FlatList,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { FlatList, StyleSheet, Text, View } from "react-native";
 
 import { BalanceCard } from "@/components/balance-card";
 import { GreetingHeader } from "@/components/greeting-header";
@@ -50,11 +44,6 @@ export default function HomeScreen() {
       <View style={[styles.section, { flex: 1 }]}>
         <View style={styles.transactionHeader}>
           <Text style={styles.sectionTitle}>Recent Transactions</Text>
-          {recentTxns.length > 0 && (
-            <TouchableOpacity>
-              <Text style={styles.seeAllButton}>See All</Text>
-            </TouchableOpacity>
-          )}
         </View>
 
         {recentTxns.length > 0 && (
@@ -73,7 +62,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 24,
-    marginBottom: 30,
   },
   titleContainer: {
     flexDirection: "row",

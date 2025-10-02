@@ -28,7 +28,6 @@ export default function RootLayout() {
         <Stack.Screen
           name="select-recipient"
           options={{
-            title: "Send Money",
             presentation: "modal",
             headerShown: false,
           }}
@@ -38,7 +37,6 @@ export default function RootLayout() {
         <Stack.Screen
           name="amount"
           options={{
-            title: "Amount",
             presentation: "modal",
             headerShown: false,
           }}
@@ -57,7 +55,6 @@ export default function RootLayout() {
         <Stack.Screen
           name="success"
           options={{
-            title: "",
             headerShown: false,
             presentation: "modal",
             gestureEnabled: false,

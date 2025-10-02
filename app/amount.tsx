@@ -20,10 +20,14 @@ export default function AmountScreen() {
   const route = useRouter();
   const params = useLocalSearchParams();
 
-  const [amount, setAmount] = useState("");
-  const [note, setNote] = useState("");
-
   const recipientId = params.recipientId || "Unknown ID";
+  const prefillAmount = params.prefillAmount
+    ? String(params.prefillAmount)
+    : "";
+  const prefillNote = params.prefillNote ? String(params.prefillNote) : "";
+
+  const [amount, setAmount] = useState(prefillAmount);
+  const [note, setNote] = useState(prefillNote);
 
   const availableBalance = useAccountStore((state) => state.balance);
   const getRecipientById = useRecipientStore((state) => state.getRecipientById);

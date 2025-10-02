@@ -1,10 +1,20 @@
 import { CloseButton } from "@/components/close-button";
 import { RecipientItem } from "@/components/recipient-item";
+import { TransactionItem } from "@/components/txn-item";
 import { theme } from "@/constants/theme";
+import { Transaction, useAccountStore } from "@/stores/useAccountStore";
 import { useRecipientStore } from "@/stores/useRecipientStore";
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { FlatList, StyleSheet, Text, TextInput, View } from "react-native";
+import {
+  FlatList,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export type Recipient = {
   id: string;
@@ -22,6 +32,9 @@ export default function SelectRecipientScreen() {
   const recipients = useRecipientStore((state) => state.recipients);
   const searchRecipients = useRecipientStore((state) => state.searchRecipients);
 
+  const getRecentTxns = useAccountStore((state) => state.getRecentTransactions);
+  const recentTxns = getRecentTxns(3);
+
   const filteredRecipients = searchQuery
     ? searchRecipients(searchQuery)
     : recipients;
@@ -35,8 +48,25 @@ export default function SelectRecipientScreen() {
     });
   };
 
+  const handleQuickResend = (transaction: Transaction) => {
+    const recipient = recipients.find(
+      (recipient) => recipient.id === transaction.recipientId
+    );
+
+    if (recipient) {
+      route.push({
+        pathname: "/amount",
+        params: {
+          recipientId: recipient.id,
+          prefillAmount: transaction.amount.toString(),
+          prefillNote: transaction.note,
+        },
+      });
+    }
+  };
+
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <CloseButton />
 
       {/* Recipient Searchbar */}
@@ -54,35 +84,52 @@ export default function SelectRecipientScreen() {
         </View>
       </View>
 
-      <View></View>
+      {/* Recipients */}
+      <View style={styles.section}>
+        <Text style={styles.sectionLabel}>Recipients</Text>
+        <FlatList
+          data={filteredRecipients}
+          renderItem={({ item }) => (
+            <RecipientItem item={item} onPress={handleSelectRecipient} />
+          )}
+          ListEmptyComponent={
+            <View style={styles.emptyContainer}>
+              <Text style={styles.emptyText}>No recipients found</Text>
+            </View>
+          }
+        />
+      </View>
 
-      <FlatList
-        contentContainerStyle={styles.recipientsContainer}
-        data={filteredRecipients}
-        renderItem={({ item }) => (
-          <RecipientItem item={item} onPress={handleSelectRecipient} />
+      {/* Recent Transfers */}
+      <View style={[styles.section, { flex: 1 }]}>
+        <Text style={styles.sectionLabel}>Recent transfers</Text>
+        {recentTxns.length > 0 && (
+          <ScrollView>
+            {recentTxns.slice(0, 3).map((transaction) => (
+              <TransactionItem
+                key={transaction.id}
+                transaction={transaction}
+                onPress={handleQuickResend}
+                showResendIcon={true}
+              />
+            ))}
+          </ScrollView>
         )}
-        ListEmptyComponent={
-          <View style={styles.emptyContainer}>
-            <Text style={styles.emptyText}>No recipients found</Text>
-          </View>
-        }
-      />
-    </View>
+      </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 16,
+    paddingHorizontal: 24,
   },
-
   section: {
-    paddingVertical: 16,
+    paddingBottom: 24,
   },
   sectionLabel: {
-    fontSize: 24,
+    fontSize: 16,
     fontWeight: "600",
     marginBottom: 8,
     color: theme.colorTextPrimary,
@@ -100,12 +147,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: theme.colorTextPrimary,
   },
-  recipientsContainer: {
-    marginTop: 32,
-  },
   emptyContainer: {
     alignItems: "center",
-    marginTop: 48,
+    marginTop: 16,
   },
   emptyText: {
     color: theme.colorTextSecondary,
