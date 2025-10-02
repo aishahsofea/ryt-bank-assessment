@@ -1,4 +1,4 @@
-import { useThemeColor } from "@/hooks/use-theme-color";
+import { theme } from "@/constants/theme";
 import { useRouter } from "expo-router";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
@@ -11,25 +11,19 @@ export const RecipientCard = ({
   recipientName,
   recipientEmail,
 }: RecipientCardProps) => {
-  const color = useThemeColor({}, "text");
-  const primaryColor = useThemeColor({}, "primary");
-  const secondaryTextColor = useThemeColor({}, "secondaryText");
-
   const route = useRouter();
 
   return (
-    <View style={[styles.card, { borderColor: primaryColor }]}>
+    <View style={styles.card}>
       <View style={styles.cardHeader}>
-        <Text style={[styles.cardTitle, { color: secondaryTextColor }]}>
-          Recipient
-        </Text>
+        <Text style={styles.cardTitle}>Recipient</Text>
         <TouchableOpacity onPress={() => route.back()}>
-          <Text style={[styles.editButton, { color: primaryColor }]}>Edit</Text>
+          <Text style={styles.editButton}>Edit</Text>
         </TouchableOpacity>
       </View>
 
       <View style={styles.recipientInfo}>
-        <View style={[styles.avatar, { backgroundColor: primaryColor }]}>
+        <View style={styles.avatar}>
           <Text style={styles.avatarText}>
             {String(recipientName)
               .split(" ")
@@ -38,15 +32,9 @@ export const RecipientCard = ({
           </Text>
         </View>
         <View style={styles.recipientDetails}>
-          <Text style={[styles.recipientName, { color: primaryColor }]}>
-            {recipientName}
-          </Text>
+          <Text style={styles.recipientName}>{recipientName}</Text>
           {recipientEmail && (
-            <Text
-              style={[styles.recipientEmail, { color: secondaryTextColor }]}
-            >
-              {recipientEmail}
-            </Text>
+            <Text style={styles.recipientEmail}>{recipientEmail}</Text>
           )}
         </View>
       </View>
@@ -56,7 +44,8 @@ export const RecipientCard = ({
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: "#FFFFFF",
+    backgroundColor: theme.colorTextPrimary,
+    borderColor: theme.colorPrimary,
     borderRadius: 20,
     borderWidth: 2,
     padding: 20,
@@ -75,10 +64,12 @@ const styles = StyleSheet.create({
   cardTitle: {
     fontSize: 16,
     fontWeight: "600",
+    color: theme.colorTextSecondary,
   },
   editButton: {
     fontSize: 14,
     fontWeight: "600",
+    color: theme.colorPrimary,
   },
   recipientInfo: {
     flexDirection: "row",
@@ -91,11 +82,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginRight: 16,
+    backgroundColor: theme.colorPrimary,
   },
   avatarText: {
     fontSize: 20,
     fontWeight: "600",
-    color: "#FFFFFF",
+    color: theme.colorTextPrimary,
   },
   recipientDetails: {
     flex: 1,
@@ -104,8 +96,10 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "600",
     marginBottom: 4,
+    color: theme.colorPrimary,
   },
   recipientEmail: {
     fontSize: 14,
+    color: theme.colorTextSecondary,
   },
 });

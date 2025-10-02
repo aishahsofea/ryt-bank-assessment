@@ -1,11 +1,8 @@
-import { useThemeColor } from "@/hooks/use-theme-color";
+import { theme } from "@/constants/theme";
 import { useAccountStore } from "@/stores/useAccountStore";
 import { StyleSheet, Text, View } from "react-native";
 
 export const GreetingHeader = () => {
-  const color = useThemeColor({}, "text");
-  const primaryColor = useThemeColor({}, "primary");
-
   const accountHolderName = useAccountStore((state) => state.accountHolderName);
 
   const getGreeting = () => {
@@ -19,9 +16,9 @@ export const GreetingHeader = () => {
     <View style={styles.header}>
       <View>
         <Text style={styles.greeting}>Good {getGreeting()}</Text>
-        <Text style={[styles.userName, { color }]}>{accountHolderName}</Text>
+        <Text style={styles.userName}>{accountHolderName}</Text>
       </View>
-      <View style={[styles.profileIcon, { backgroundColor: primaryColor }]}>
+      <View style={styles.profileIcon}>
         <Text style={styles.profileInitial}>
           {accountHolderName.charAt(0).toUpperCase()}
         </Text>
@@ -40,12 +37,13 @@ const styles = StyleSheet.create({
   },
   greeting: {
     fontSize: 18,
-    color: "#6B7280",
+    color: theme.colorTextSecondary,
     marginBottom: 4,
   },
   userName: {
     fontSize: 36,
     fontWeight: "700",
+    color: theme.colorTextPrimary,
   },
   profileIcon: {
     padding: 4,
@@ -54,10 +52,11 @@ const styles = StyleSheet.create({
     borderRadius: 22,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: theme.colorPrimary,
   },
   profileInitial: {
     fontSize: 18,
     fontWeight: "600",
-    color: "#FFFFFF",
+    color: theme.colorTextPrimary,
   },
 });

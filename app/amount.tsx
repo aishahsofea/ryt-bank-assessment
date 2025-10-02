@@ -1,6 +1,5 @@
 import { CloseButton } from "@/components/close-button";
 import { theme } from "@/constants/theme";
-import { useThemeColor } from "@/hooks/use-theme-color";
 import { useAccountStore } from "@/stores/useAccountStore";
 import { useRecipientStore } from "@/stores/useRecipientStore";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -17,10 +16,6 @@ import {
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 export default function AmountScreen() {
-  const color = useThemeColor({}, "text");
-  const primaryColor = useThemeColor({}, "primary");
-  const iconColor = useThemeColor({}, "icon");
-
   const route = useRouter();
   const params = useLocalSearchParams();
 
@@ -84,13 +79,13 @@ export default function AmountScreen() {
       <CloseButton />
 
       {/* Recipient Info */}
-      <View style={[styles.recipientBar, { backgroundColor: primaryColor }]}>
+      <View style={styles.recipientBar}>
         <View style={styles.recipientInfo}>
-          <Text style={[styles.sendingToLabel, { color }]}>Sending to</Text>
-          <Text style={[styles.recipientName, { color }]}>{recipientName}</Text>
+          <Text style={styles.sendingToLabel}>Sending to</Text>
+          <Text style={styles.recipientName}>{recipientName}</Text>
         </View>
         <TouchableOpacity onPress={() => route.back()}>
-          <Text style={[styles.changeButton, { color }]}>Change</Text>
+          <Text style={styles.changeButton}>Change</Text>
         </TouchableOpacity>
       </View>
 
@@ -98,9 +93,9 @@ export default function AmountScreen() {
       <View style={styles.amountSection}>
         <Text style={styles.amountLabel}>Amount</Text>
         <View style={styles.amountInputContainer}>
-          <Text style={[styles.currency, { color }]}>RM</Text>
+          <Text style={styles.currency}>RM</Text>
           <TextInput
-            style={[styles.amountInput, { color }]}
+            style={styles.amountInput}
             placeholder="0.00"
             placeholderTextColor="#D1D5DB"
             keyboardType="decimal-pad"
@@ -125,20 +120,17 @@ export default function AmountScreen() {
       </View>
 
       <View style={styles.noteSection}>
-        <Text style={[styles.noteLabel, { color }]}>
-          What's this for?{" "}
-          <Text style={[styles.optional, { color: iconColor }]}>
-            (optional)
-          </Text>
+        <Text style={styles.noteLabel}>
+          What's this for? <Text style={styles.optional}>(optional)</Text>
         </Text>
         <View
           style={[
             styles.noteInputContainer,
-            { borderColor: note ? primaryColor : "#E5E7EB" },
+            { borderColor: note ? theme.colorPrimary : "#E5E7EB" },
           ]}
         >
           <TextInput
-            style={[styles.noteInput, { color }]}
+            style={styles.noteInput}
             placeholder="Add a note or message"
             placeholderTextColor="#9CA3AF"
             value={note}
@@ -148,9 +140,7 @@ export default function AmountScreen() {
             textAlignVertical="top"
           />
         </View>
-        <Text style={[styles.characterCount, { color: iconColor }]}>
-          {note.length}/100
-        </Text>
+        <Text style={styles.characterCount}>{note.length}/100</Text>
       </View>
 
       {/* Continue Button */}
@@ -158,7 +148,6 @@ export default function AmountScreen() {
         <TouchableOpacity
           style={[
             styles.continueButton,
-            { backgroundColor: primaryColor },
             (!amount || parseFloat(amount) <= 0) &&
               styles.continueButtonDisabled,
           ]}
@@ -166,8 +155,12 @@ export default function AmountScreen() {
           disabled={!amount || parseFloat(amount) <= 0}
           activeOpacity={0.8}
         >
-          <Text style={[styles.continueButtonText, { color }]}>Continue</Text>
-          <Ionicons name="arrow-forward" size={20} color={color} />
+          <Text style={styles.continueButtonText}>Continue</Text>
+          <Ionicons
+            name="arrow-forward"
+            size={20}
+            color={theme.colorTextPrimary}
+          />
         </TouchableOpacity>
       </View>
     </KeyboardAwareScrollView>
@@ -188,6 +181,7 @@ const styles = StyleSheet.create({
     paddingBottom: 24,
     borderBottomWidth: 1,
     borderRadius: 12,
+    backgroundColor: theme.colorPrimary,
   },
   recipientInfo: {
     flex: 1,
@@ -195,15 +189,18 @@ const styles = StyleSheet.create({
   sendingToLabel: {
     fontSize: 14,
     marginBottom: 4,
-    fontWeight: "600",
+    fontWeight: "400",
+    color: theme.colorTextPrimary,
   },
   recipientName: {
     fontSize: 24,
     fontWeight: "600",
+    color: theme.colorTextPrimary,
   },
   changeButton: {
     fontSize: 14,
     fontWeight: "600",
+    color: theme.colorTextPrimary,
   },
   amountSection: {
     paddingTop: 40,
@@ -225,12 +222,14 @@ const styles = StyleSheet.create({
     fontSize: 48,
     fontWeight: "700",
     marginRight: 12,
+    color: theme.colorTextPrimary,
   },
   amountInput: {
     flex: 1,
     fontSize: 48,
     fontWeight: "700",
     padding: 0,
+    color: theme.colorTextPrimary,
   },
   balanceContainer: {
     flexDirection: "row",
@@ -241,7 +240,7 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colorGreenLight,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: theme.colorGreen,
+    borderColor: theme.colorSuccessText,
   },
   balanceRow: {
     flexDirection: "row",
@@ -250,13 +249,13 @@ const styles = StyleSheet.create({
   },
   balanceLabel: {
     fontSize: 16,
-    color: theme.colorGreen,
+    color: theme.colorSuccessText,
     fontWeight: "500",
   },
   balanceAmount: {
     fontSize: 16,
     fontWeight: "700",
-    color: theme.colorGreen,
+    color: theme.colorSuccessText,
   },
   noteSection: {
     marginTop: 32,
@@ -265,9 +264,11 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "600",
     marginBottom: 12,
+    color: theme.colorTextPrimary,
   },
   optional: {
     fontWeight: "400",
+    color: theme.colorGrey,
   },
   noteInputContainer: {
     borderWidth: 2,
@@ -278,6 +279,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     minHeight: 80,
     padding: 0,
+    color: theme.colorTextPrimary,
   },
   characterCount: {
     fontSize: 12,
@@ -294,6 +296,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     gap: 8,
+    backgroundColor: theme.colorPrimary,
   },
   continueButtonDisabled: {
     backgroundColor: theme.colorDisabledGrey,
@@ -301,5 +304,6 @@ const styles = StyleSheet.create({
   continueButtonText: {
     fontSize: 17,
     fontWeight: "600",
+    color: theme.colorTextPrimary,
   },
 });

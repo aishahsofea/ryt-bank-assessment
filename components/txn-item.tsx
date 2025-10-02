@@ -1,4 +1,4 @@
-import { useThemeColor } from "@/hooks/use-theme-color";
+import { theme } from "@/constants/theme";
 import { Transaction } from "@/stores/useAccountStore";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { StyleSheet, Text, View } from "react-native";
@@ -8,8 +8,6 @@ type TransactionItemProps = {
 };
 
 export const TransactionItem = ({ transaction }: TransactionItemProps) => {
-  const color = useThemeColor({}, "text");
-
   const isReceived = transaction.type === "received";
   const amount = transaction.amount;
 
@@ -40,17 +38,21 @@ export const TransactionItem = ({ transaction }: TransactionItemProps) => {
         <View
           style={[
             styles.transactionIcon,
-            { backgroundColor: isReceived ? "#D1FAE5" : "#FEE2E2" },
+            {
+              backgroundColor: isReceived
+                ? theme.colorGreenLight
+                : theme.colorRedLight,
+            },
           ]}
         >
           <Ionicons
             name={isReceived ? "arrow-down" : "arrow-up"}
             size={20}
-            color={isReceived ? "#059669" : "#DC2626"}
+            color={isReceived ? theme.colorSuccessText : theme.colorErrorText}
           />
         </View>
         <View style={styles.transactionDetails}>
-          <Text style={[styles.transactionName, { color }]} numberOfLines={1}>
+          <Text style={styles.transactionName} numberOfLines={1}>
             {transaction.recipientName}
           </Text>
           <Text style={styles.transactionDate}>
@@ -61,7 +63,7 @@ export const TransactionItem = ({ transaction }: TransactionItemProps) => {
       <Text
         style={[
           styles.transactionAmount,
-          { color: isReceived ? "#059669" : "#DC2626" },
+          { color: isReceived ? theme.colorSuccessText : theme.colorErrorText },
         ]}
       >
         {isReceived ? "+" : "-"}RM {amount.toFixed(2)}
@@ -78,7 +80,7 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     paddingHorizontal: 12,
     borderBottomWidth: 1,
-    borderBottomColor: "#F3F4F6",
+    borderBottomColor: theme.colorGrey,
   },
   transactionLeft: {
     flexDirection: "row",
@@ -100,10 +102,11 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: "600",
     marginBottom: 4,
+    color: theme.colorTextPrimary,
   },
   transactionDate: {
     fontSize: 13,
-    color: "#9CA3AF",
+    color: theme.colorTextSecondary,
   },
   transactionAmount: {
     fontSize: 15,

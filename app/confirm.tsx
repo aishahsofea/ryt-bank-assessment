@@ -1,9 +1,9 @@
 import { BalanceComparisonCard } from "@/components/balance-comparison-card";
 import { CloseButton } from "@/components/close-button";
+import { ConfirmBottomButton } from "@/components/confirm-bottom-button";
 import { RecipientCard } from "@/components/recipient-card";
-import { ConfirmBottomButton } from "@/components/ui/confirm-bottom-button";
+import { theme } from "@/constants/theme";
 import { useBiometric } from "@/hooks/use-biometric";
-import { useThemeColor } from "@/hooks/use-theme-color";
 import { useTransferMutation } from "@/hooks/use-transfer-mutation";
 import { useAccountStore } from "@/stores/useAccountStore";
 import { useRecipientStore } from "@/stores/useRecipientStore";
@@ -12,9 +12,6 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { Alert, ScrollView, StyleSheet, Text, View } from "react-native";
 
 export default function ConfirmScreen() {
-  const color = useThemeColor({}, "text");
-  const primaryColor = useThemeColor({}, "primary");
-
   const params = useLocalSearchParams();
   const route = useRouter();
 
@@ -99,21 +96,23 @@ export default function ConfirmScreen() {
 
       {/* Header Section */}
       <View style={styles.header}>
-        <Text style={[styles.headerTitle, { color }]}>Review & Confirm</Text>
+        <Text style={styles.headerTitle}>Review & Confirm</Text>
         <Text style={styles.headerSubtitle}>
           Please check all details before confirming
         </Text>
       </View>
 
       {/* Amount Display - Hero Section */}
-      <View style={[styles.amountHero, { borderColor: primaryColor }]}>
+      <View style={styles.amountHero}>
         <Text style={styles.amountLabel}>You're sending</Text>
-        <Text style={[styles.amountLarge, { color: primaryColor }]}>
-          RM {amount.toFixed(2)}
-        </Text>
+        <Text style={styles.amountLarge}>RM {amount.toFixed(2)}</Text>
         {note && (
           <View style={styles.noteDisplay}>
-            <Ionicons name="chatbox-outline" size={16} color="#6B7280" />
+            <Ionicons
+              name="chatbox-outline"
+              size={16}
+              color={theme.colorTextSecondary}
+            />
             <Text style={styles.noteText} numberOfLines={2}>
               {note}
             </Text>
@@ -151,19 +150,21 @@ const styles = StyleSheet.create({
     fontSize: 32,
     fontWeight: "700",
     marginBottom: 8,
+    color: theme.colorTextPrimary,
   },
   headerSubtitle: {
     fontSize: 15,
-    color: "#6B7280",
+    color: theme.colorTextSecondary,
   },
   amountHero: {
-    backgroundColor: "#FFFFFF",
+    backgroundColor: theme.colorTextPrimary,
     borderRadius: 20,
     borderWidth: 2,
+    borderColor: theme.colorPrimary,
     padding: 20,
     marginBottom: 20,
     alignItems: "center",
-    shadowColor: "#000",
+    shadowColor: theme.colorBackground,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.05,
     shadowRadius: 8,
@@ -171,7 +172,7 @@ const styles = StyleSheet.create({
   },
   amountLabel: {
     fontSize: 14,
-    color: "#6B7280",
+    color: theme.colorTextSecondary,
     marginBottom: 8,
     fontWeight: "500",
   },
@@ -179,11 +180,12 @@ const styles = StyleSheet.create({
     fontSize: 48,
     fontWeight: "700",
     letterSpacing: -1,
+    color: theme.colorPrimary,
   },
   noteDisplay: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#F9FAFB",
+    backgroundColor: theme.colorDisabledGrey,
     paddingHorizontal: 16,
     paddingVertical: 10,
     borderRadius: 8,
@@ -193,7 +195,7 @@ const styles = StyleSheet.create({
   },
   noteText: {
     fontSize: 14,
-    color: "#6B7280",
+    color: theme.colorTextSecondary,
     flex: 1,
   },
 });

@@ -1,4 +1,4 @@
-import { useThemeColor } from "@/hooks/use-theme-color";
+import { theme } from "@/constants/theme";
 import { useEffect, useRef } from "react";
 import {
   Animated,
@@ -22,9 +22,6 @@ export const SuccessfulTxnCard = ({
   recipientName,
   transactionId,
 }: SuccessfulTxnCardProps) => {
-  const color = useThemeColor({}, "text");
-  const secondaryTextColor = useThemeColor({}, "secondaryText");
-
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -70,9 +67,7 @@ export const SuccessfulTxnCard = ({
       {/* Recipient */}
       <View style={styles.detailRow}>
         <Text style={styles.detailLabel}>To</Text>
-        <Text style={[styles.detailValue, { color: secondaryTextColor }]}>
-          {recipientName}
-        </Text>
+        <Text style={styles.detailValue}>{recipientName}</Text>
       </View>
 
       {/* Transaction ID */}
@@ -82,7 +77,7 @@ export const SuccessfulTxnCard = ({
           style={[
             styles.detailValue,
             styles.transactionId,
-            { color: secondaryTextColor },
+            { color: theme.colorTextSecondary },
           ]}
         >
           {transactionId}
@@ -92,9 +87,7 @@ export const SuccessfulTxnCard = ({
       {/* Date */}
       <View style={styles.detailRow}>
         <Text style={styles.detailLabel}>Date & Time</Text>
-        <Text style={[styles.detailValue, { color: secondaryTextColor }]}>
-          {formatDate(date)}
-        </Text>
+        <Text style={styles.detailValue}>{formatDate(date)}</Text>
       </View>
 
       {/* Status Badge */}
@@ -108,19 +101,19 @@ export const SuccessfulTxnCard = ({
 
 const styles = StyleSheet.create({
   detailsCard: {
-    backgroundColor: "#F9FAFB",
+    backgroundColor: theme.colorTextPrimary,
     borderRadius: 16,
     padding: 24,
     marginBottom: 32,
     borderWidth: 1,
-    borderColor: "#E5E7EB",
+    borderColor: theme.colorGrey,
   },
   amountSection: {
     alignItems: "center",
   },
   amountLabel: {
     fontSize: 14,
-    color: "#6B7280",
+    color: theme.colorTextSecondary,
     marginBottom: 8,
     fontWeight: "500",
   },
@@ -131,7 +124,7 @@ const styles = StyleSheet.create({
   },
   divider: {
     height: 1,
-    backgroundColor: "#E5E7EB",
+    backgroundColor: theme.colorGrey,
     marginVertical: 20,
   },
   detailRow: {
@@ -142,7 +135,7 @@ const styles = StyleSheet.create({
   },
   detailLabel: {
     fontSize: 14,
-    color: "#6B7280",
+    color: theme.colorTextSecondary,
     fontWeight: "500",
   },
   detailValue: {
@@ -150,6 +143,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     flex: 1,
     textAlign: "right",
+    color: theme.colorTextSecondary,
   },
   transactionId: {
     fontFamily: Platform.OS === "ios" ? "Courier" : "monospace",
@@ -158,7 +152,7 @@ const styles = StyleSheet.create({
   statusBadge: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#D1FAE5",
+    backgroundColor: theme.colorTextPrimary,
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 20,
@@ -170,11 +164,11 @@ const styles = StyleSheet.create({
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: "#10B981",
+    backgroundColor: theme.colorSuccessBackground,
   },
   statusText: {
     fontSize: 13,
     fontWeight: "600",
-    color: "#059669",
+    color: theme.colorSuccessText,
   },
 });

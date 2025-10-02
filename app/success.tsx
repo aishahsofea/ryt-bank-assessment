@@ -1,6 +1,5 @@
 import { SuccessfulTxnCard } from "@/components/successful-txn-card";
 import { theme } from "@/constants/theme";
-import { useThemeColor } from "@/hooks/use-theme-color";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useRef } from "react";
@@ -14,10 +13,6 @@ import {
 } from "react-native";
 
 export default function SuccessScreen() {
-  const color = useThemeColor({}, "text");
-  const primaryColor = useThemeColor({}, "primary");
-  const primaryShadowColor = useThemeColor({}, "primaryShadow");
-
   const scaleAnim = useRef(new Animated.Value(0)).current;
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
@@ -63,10 +58,12 @@ export default function SuccessScreen() {
             },
           ]}
         >
-          <View
-            style={[styles.iconCircle, { backgroundColor: theme.colorSuccess }]}
-          >
-            <Ionicons name="checkmark" size={76} color={color} />
+          <View style={styles.iconCircle}>
+            <Ionicons
+              name="checkmark"
+              size={76}
+              color={theme.colorTextPrimary}
+            />
           </View>
         </Animated.View>
       </View>
@@ -79,7 +76,7 @@ export default function SuccessScreen() {
           },
         ]}
       >
-        <Text style={[styles.title, { color }]}>Transfer Successful!</Text>
+        <Text style={styles.title}>Transfer Successful!</Text>
         <Text style={styles.subtitle}>Your money is on its way</Text>
       </Animated.View>
 
@@ -91,14 +88,11 @@ export default function SuccessScreen() {
       />
 
       <TouchableOpacity
-        style={[
-          styles.doneButton,
-          { backgroundColor: primaryColor, shadowColor: primaryShadowColor },
-        ]}
+        style={styles.doneButton}
         onPress={handleDone}
         activeOpacity={0.8}
       >
-        <Text style={[styles.doneButtonText, { color }]}>Done</Text>
+        <Text style={styles.doneButtonText}>Done</Text>
       </TouchableOpacity>
     </View>
   );
@@ -127,7 +121,8 @@ const styles = StyleSheet.create({
     borderRadius: 60,
     justifyContent: "center",
     alignItems: "center",
-    shadowColor: "#10B981",
+    backgroundColor: theme.colorSuccessBackground,
+    shadowColor: theme.colorSuccessBackground,
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.3,
     shadowRadius: 16,
@@ -142,10 +137,11 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     marginBottom: 8,
     textAlign: "center",
+    color: theme.colorTextPrimary,
   },
   subtitle: {
     fontSize: 16,
-    color: "#6B7280",
+    color: theme.colorTextSecondary,
     textAlign: "center",
   },
   doneButton: {
@@ -157,10 +153,13 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 8,
     elevation: 5,
+    backgroundColor: theme.colorPrimary,
+    shadowColor: theme.colorPrimaryShadow,
   },
   doneButtonText: {
     fontSize: 17,
     fontWeight: "700",
     letterSpacing: 0.5,
+    color: theme.colorTextPrimary,
   },
 });

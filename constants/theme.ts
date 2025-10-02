@@ -1,40 +1,4 @@
-/**
- * Below are the colors that are used in the app. The colors are defined in the light and dark mode.
- * There are many other ways to style your app. For example, [Nativewind](https://www.nativewind.dev/), [Tamagui](https://tamagui.dev/), [unistyles](https://reactnativeunistyles.vercel.app), etc.
- */
-
 import { Platform } from "react-native";
-
-const tintColorLight = "#0a7ea4";
-const tintColorDark = "#fff";
-const primary = "#0000e6";
-const primaryShadow = "#4F46E5";
-const secondaryText = "#6B7280";
-
-export const Colors = {
-  light: {
-    text: "#11181C",
-    background: "#fff",
-    tint: tintColorLight,
-    icon: "#687076",
-    tabIconDefault: "#687076",
-    tabIconSelected: tintColorLight,
-    primary,
-    primaryShadow,
-    secondaryText,
-  },
-  dark: {
-    text: "#ECEDEE",
-    background: "#151718",
-    tint: tintColorDark,
-    icon: "#9BA1A6",
-    tabIconDefault: "#9BA1A6",
-    tabIconSelected: tintColorDark,
-    primary,
-    primaryShadow,
-    secondaryText,
-  },
-};
 
 export const Fonts = Platform.select({
   ios: {
@@ -63,9 +27,16 @@ export const Fonts = Platform.select({
 });
 
 export const theme = {
-  colorPrimary: primary,
-  colorGreen: "#059669",
-  colorGreenLight: "#F0FDF4",
+  colorPrimary: "#0000E6",
+  colorPrimaryShadow: "#4F46E5",
+  colorTextPrimary: "#ECEDEE",
+  colorTextSecondary: "#6B7280",
+  colorBackground: "#151718",
+  colorGrey: "#9BA1A6",
+  colorGreenLight: "#D1FAE5",
+  colorRedLight: "#FEE2E2",
   colorDisabledGrey: "#D1D5DB",
-  colorSuccess: "#10B981",
+  colorSuccessBackground: "#10B981",
+  colorSuccessText: "#059669",
+  colorErrorText: "#DC2626",
 };

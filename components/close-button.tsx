@@ -1,10 +1,9 @@
-import { useThemeColor } from "@/hooks/use-theme-color";
+import { theme } from "@/constants/theme";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useRouter } from "expo-router";
 import { StyleSheet, TouchableOpacity } from "react-native";
 
 export const CloseButton = () => {
-  const primaryColor = useThemeColor({}, "primary");
   const route = useRouter();
 
   return (
@@ -13,7 +12,7 @@ export const CloseButton = () => {
       activeOpacity={0.8}
       onPress={() => route.back()}
     >
-      <Ionicons name="close-circle" size={32} color={primaryColor} />
+      <Ionicons name="close-circle" size={32} color={theme.colorPrimary} />
     </TouchableOpacity>
   );
 };

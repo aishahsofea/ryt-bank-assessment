@@ -1,4 +1,4 @@
-import { useThemeColor } from "@/hooks/use-theme-color";
+import { theme } from "@/constants/theme";
 import { useAccountStore } from "@/stores/useAccountStore";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { StyleSheet, Text, View } from "react-native";
@@ -8,34 +8,24 @@ type BalanceCardProps = {
 };
 
 export const BalanceComparisonCard = ({ transferAmount }: BalanceCardProps) => {
-  const color = useThemeColor({}, "text");
-  const primaryColor = useThemeColor({}, "primary");
-  const secondaryTextColor = useThemeColor({}, "secondaryText");
-
   const availableBalance = useAccountStore((state) => state.balance);
   const newBalance = availableBalance - (transferAmount || 0);
 
   return (
-    <View style={[styles.balanceCard, { backgroundColor: color }]}>
+    <View style={styles.balanceCard}>
       <View style={styles.balanceComparison}>
         <View>
-          <Text style={[styles.balanceLabel, { color: secondaryTextColor }]}>
-            Current balance
-          </Text>
-          <Text style={[styles.balanceAmount, { color: primaryColor }]}>
+          <Text style={styles.balanceLabel}>Current balance</Text>
+          <Text style={styles.balanceAmount}>
             RM {availableBalance.toFixed(2)}
           </Text>
         </View>
 
-        <Ionicons name="arrow-forward" size={24} color={primaryColor} />
+        <Ionicons name="arrow-forward" size={24} color={theme.colorPrimary} />
 
         <View>
-          <Text style={[styles.balanceLabel, { color: secondaryTextColor }]}>
-            After transfer
-          </Text>
-          <Text style={[styles.balanceAmount, { color: primaryColor }]}>
-            RM {newBalance.toFixed(2)}
-          </Text>
+          <Text style={styles.balanceLabel}>After transfer</Text>
+          <Text style={styles.balanceAmount}>RM {newBalance.toFixed(2)}</Text>
         </View>
       </View>
     </View>
@@ -49,6 +39,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     borderWidth: 1,
     borderColor: "#BFDBFE",
+    backgroundColor: theme.colorTextPrimary,
   },
   balanceComparison: {
     flexDirection: "row",
@@ -57,12 +48,13 @@ const styles = StyleSheet.create({
   },
   balanceLabel: {
     fontSize: 12,
-    color: "#6B7280",
+    color: theme.colorTextSecondary,
     marginBottom: 6,
     fontWeight: "500",
   },
   balanceAmount: {
     fontSize: 18,
     fontWeight: "700",
+    color: theme.colorPrimary,
   },
 });

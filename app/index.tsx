@@ -10,16 +10,13 @@ import { BalanceCard } from "@/components/balance-card";
 import { GreetingHeader } from "@/components/greeting-header";
 import { QuickActionButton } from "@/components/quick-action-button";
 import { TransactionItem } from "@/components/txn-item";
-import { useThemeColor } from "@/hooks/use-theme-color";
+import { theme } from "@/constants/theme";
 import { useAccountStore } from "@/stores/useAccountStore";
 import { useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function HomeScreen() {
   const route = useRouter();
-
-  const color = useThemeColor({}, "text");
-  const primaryColor = useThemeColor({}, "primary");
 
   const balance = useAccountStore((state) => state.balance);
   const getRecentTxns = useAccountStore((state) => state.getRecentTransactions);
@@ -33,7 +30,7 @@ export default function HomeScreen() {
       <BalanceCard balance={balance} />
 
       <View style={styles.section}>
-        <Text style={[styles.sectionTitle, { color }]}>
+        <Text style={styles.sectionTitle}>
           What would you like to do today?
         </Text>
         <View style={styles.quickActionsContainer}>
@@ -52,14 +49,10 @@ export default function HomeScreen() {
 
       <View style={[styles.section, { flex: 1 }]}>
         <View style={styles.transactionHeader}>
-          <Text style={[styles.sectionTitle, { color }]}>
-            Recent Transactions
-          </Text>
+          <Text style={styles.sectionTitle}>Recent Transactions</Text>
           {recentTxns.length > 0 && (
             <TouchableOpacity>
-              <Text style={[styles.seeAllButton, { color: primaryColor }]}>
-                See All
-              </Text>
+              <Text style={styles.seeAllButton}>See All</Text>
             </TouchableOpacity>
           )}
         </View>
@@ -106,10 +99,12 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     fontWeight: "600",
+    color: theme.colorTextPrimary,
   },
   seeAllButton: {
     fontSize: 14,
     fontWeight: "600",
+    color: theme.colorPrimary,
   },
   balanceText: {
     fontWeight: "600",

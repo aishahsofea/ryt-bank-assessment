@@ -1,6 +1,6 @@
 import { CloseButton } from "@/components/close-button";
 import { RecipientItem } from "@/components/recipient-item";
-import { useThemeColor } from "@/hooks/use-theme-color";
+import { theme } from "@/constants/theme";
 import { useRecipientStore } from "@/stores/useRecipientStore";
 import { useRouter } from "expo-router";
 import { useState } from "react";
@@ -16,13 +16,8 @@ export type Recipient = {
 
 export default function SelectRecipientScreen() {
   const route = useRouter();
-  const primaryColor = useThemeColor({}, "primary");
-  const color = useThemeColor({}, "text");
 
   const [searchQuery, setSearchQuery] = useState("");
-  const [recipient, setRecipient] = useState<Recipient | null>(null);
-  const [amount, setAmount] = useState("");
-  const [note, setNote] = useState("");
 
   const recipients = useRecipientStore((state) => state.recipients);
   const searchRecipients = useRecipientStore((state) => state.searchRecipients);
@@ -32,7 +27,6 @@ export default function SelectRecipientScreen() {
     : recipients;
 
   const handleSelectRecipient = (recipient: Recipient) => {
-    setRecipient(recipient);
     route.push({
       pathname: "/amount",
       params: {
@@ -42,21 +36,15 @@ export default function SelectRecipientScreen() {
   };
 
   return (
-    <View
-      style={styles.container}
-      // contentContainerStyle={styles.scrollContent}
-      // keyboardShouldPersistTaps="handled"
-    >
+    <View style={styles.container}>
       <CloseButton />
 
       {/* Recipient Searchbar */}
       <View style={styles.section}>
-        <Text style={[styles.sectionLabel, { color }]}>
-          Who are you sending to?
-        </Text>
-        <View style={[styles.recipientInput, { borderColor: primaryColor }]}>
+        <Text style={styles.sectionLabel}>Who are you sending to?</Text>
+        <View style={styles.recipientInput}>
           <TextInput
-            style={[styles.recipientInputText, { color }]}
+            style={styles.recipientInputText}
             placeholder="Name, email, phone number"
             value={searchQuery}
             onChangeText={setSearchQuery}
@@ -75,8 +63,8 @@ export default function SelectRecipientScreen() {
           <RecipientItem item={item} onPress={handleSelectRecipient} />
         )}
         ListEmptyComponent={
-          <View>
-            <Text>No recipients in the list</Text>
+          <View style={styles.emptyContainer}>
+            <Text style={styles.emptyText}>No recipients found</Text>
           </View>
         }
       />
@@ -97,10 +85,12 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "600",
     marginBottom: 8,
+    color: theme.colorTextPrimary,
   },
   recipientInput: {
     flexDirection: "row",
     borderRadius: 40,
+    borderColor: theme.colorPrimary,
     paddingHorizontal: 16,
     paddingVertical: 14,
     borderWidth: 2,
@@ -108,8 +98,17 @@ const styles = StyleSheet.create({
   recipientInputText: {
     flex: 1,
     fontSize: 16,
+    color: theme.colorTextPrimary,
   },
   recipientsContainer: {
     marginTop: 32,
+  },
+  emptyContainer: {
+    alignItems: "center",
+    marginTop: 48,
+  },
+  emptyText: {
+    color: theme.colorTextSecondary,
+    fontSize: 16,
   },
 });

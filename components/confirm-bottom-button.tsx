@@ -1,4 +1,4 @@
-import { useThemeColor } from "@/hooks/use-theme-color";
+import { theme } from "@/constants/theme";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useRouter } from "expo-router";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
@@ -12,8 +12,6 @@ export const ConfirmBottomButton = ({
   isProcessing,
   onPressConfirm,
 }: ConfirmBottomButtonProps) => {
-  const primaryColor = useThemeColor({}, "primary");
-
   const route = useRouter();
 
   return (
@@ -21,7 +19,6 @@ export const ConfirmBottomButton = ({
       <TouchableOpacity
         style={[
           styles.confirmButton,
-          { backgroundColor: primaryColor },
           isProcessing && styles.confirmButtonDisabled,
         ]}
         onPress={onPressConfirm}
@@ -60,8 +57,8 @@ const styles = StyleSheet.create({
   bottomContainer: {
     paddingTop: 20,
     borderTopWidth: 1,
-    borderTopColor: "#E5E7EB",
-    shadowColor: "#000",
+    borderTopColor: theme.colorTextPrimary,
+    shadowColor: theme.colorBackground,
     shadowOffset: { width: 0, height: -4 },
     shadowOpacity: 0.1,
     shadowRadius: 12,
@@ -75,7 +72,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     gap: 10,
     marginBottom: 12,
-    shadowColor: "#4F46E5",
+    backgroundColor: theme.colorPrimary,
+    shadowColor: theme.colorPrimaryShadow,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,

@@ -1,5 +1,5 @@
 import { Recipient } from "@/app/select-recipient";
-import { useThemeColor } from "@/hooks/use-theme-color";
+import { theme } from "@/constants/theme";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
@@ -9,9 +9,6 @@ type RecipientItemProps = {
 };
 
 export const RecipientItem = ({ item, onPress }: RecipientItemProps) => {
-  const primaryColor = useThemeColor({}, "primary");
-  const color = useThemeColor({}, "text");
-
   return (
     <TouchableOpacity
       style={styles.recipientItem}
@@ -19,11 +16,11 @@ export const RecipientItem = ({ item, onPress }: RecipientItemProps) => {
       onPress={() => onPress?.(item)}
     >
       <View style={styles.recipientInfo}>
-        <View style={[styles.avatar, { backgroundColor: primaryColor }]}>
+        <View style={styles.avatar}>
           <Text style={styles.avatarText}>{item.initials}</Text>
         </View>
         <View style={styles.recipientDetails}>
-          <Text style={[styles.recipientName, { color }]}>{item.name}</Text>
+          <Text style={styles.recipientName}>{item.name}</Text>
           <Text style={styles.recipientAccount}>{item.accountType}</Text>
         </View>
       </View>
@@ -53,11 +50,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginRight: 16,
+    backgroundColor: theme.colorPrimary,
   },
   avatarText: {
     fontSize: 16,
     fontWeight: "600",
-    color: "#FFFFFF",
+    color: theme.colorTextPrimary,
   },
   recipientDetails: {
     flex: 1,
@@ -66,9 +64,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "600",
     marginBottom: 4,
+    color: theme.colorTextPrimary,
   },
   recipientAccount: {
     fontSize: 14,
-    color: "#6B7280",
+    color: theme.colorTextSecondary,
   },
 });
