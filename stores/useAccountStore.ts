@@ -83,7 +83,9 @@ export const useAccountStore = create<AccountState>()(
       getRecentTransactions: (limit = 10) => {
         const transactions = get().transactions;
         return transactions
-          .filter((txn) => txn.status === "completed" || txn.status === "pending")
+          .filter(
+            (txn) => txn.status === "completed" || txn.status === "pending"
+          )
           .slice(0, limit);
       },
 

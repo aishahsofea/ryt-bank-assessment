@@ -2,6 +2,7 @@ import { BalanceComparisonCard } from "@/components/balance-comparison-card";
 import { CloseButton } from "@/components/close-button";
 import { RecipientCard } from "@/components/recipient-card";
 import { ConfirmBottomButton } from "@/components/ui/confirm-bottom-button";
+import { useBiometric } from "@/hooks/use-biometric";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import { useTransferMutation } from "@/hooks/use-transfer-mutation";
 import { useAccountStore } from "@/stores/useAccountStore";
@@ -34,9 +35,27 @@ export default function ConfirmScreen() {
 
   const { mutate: transfer, isPending: isTransferPending } =
     useTransferMutation();
+  const { isAvailable: isBiometricAvailable, authenticate } = useBiometric();
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     if (isTransferPending) return;
+
+    if (isBiometricAvailable) {
+      const authResult = await authenticate(
+        `Authenticate to transfer RM ${amount.toFixed(2)} to ${recipientName}`
+      );
+
+      if (!authResult.success) {
+        Alert.alert(
+          "Authentication Failed",
+          authResult.error ||
+            "Biometric authentication failed. Please try again."
+        );
+        return;
+      }
+
+      console.log(`✅ Authenticated with ${authResult.biometricType}`);
+    }
 
     transfer(
       {
