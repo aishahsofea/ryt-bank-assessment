@@ -2,6 +2,12 @@
 
 This is a simple mobile application built with [Expo](https://expo.dev) and [React Native](https://reactnative.dev) that allows users to transfer money to their contacts. The app features a user-friendly interface, secure transaction processing, and real-time updates on transfer status.
 
+## App Demo
+
+https://github.com/user-attachments/assets/674c4b9a-9778-4e4a-a587-a0c0c4c22c64
+
+
+
 ## Tech Stack
 
 | Category             | Technology                       |
