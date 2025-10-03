@@ -6,8 +6,6 @@ This is a simple mobile application built with [Expo](https://expo.dev) and [Rea
 
 https://github.com/user-attachments/assets/674c4b9a-9778-4e4a-a587-a0c0c4c22c64
 
-
-
 ## Tech Stack
 
 | Category             | Technology                       |
@@ -66,3 +64,7 @@ https://github.com/user-attachments/assets/674c4b9a-9778-4e4a-a587-a0c0c4c22c64
     ├── services/         <--- API services
     └── stores/           <--- Zustand stores
 ```
+
+### Design Decisions & Challenges
+
+Please refer to the [design-decision.md](design-decision.md) file for insights into the design decisions made during development, challenges faced, and potential improvements for the future.

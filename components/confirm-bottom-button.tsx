@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
     opacity: 0.5,
   },
   confirmButtonText: {
-    color: "#FFFFFF",
+    color: theme.colorTextPrimary,
     fontSize: 17,
     fontWeight: "700",
     letterSpacing: 0.5,
@@ -95,6 +95,6 @@ const styles = StyleSheet.create({
   cancelButtonText: {
     fontSize: 15,
     fontWeight: "600",
-    color: "#6B7280",
+    color: theme.colorTextSecondary,
   },
 });

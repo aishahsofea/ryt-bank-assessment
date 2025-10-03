@@ -32,7 +32,7 @@ type AccountState = {
   resetAccount: () => void;
 };
 
-// TODO: Fetch from API
+// Note: In a real app, initial state would come from an API or secure source
 const initialState = {
   balance: 1234.0,
   accountNumber: "1234567890",

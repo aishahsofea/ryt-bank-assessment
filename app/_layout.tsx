@@ -5,10 +5,6 @@ import "react-native-reanimated";
 import { theme } from "@/constants/theme";
 import { QueryProvider } from "@/providers/QueryProvider";
 
-export const unstable_settings = {
-  anchor: "(tabs)",
-};
-
 export default function RootLayout() {
   return (
     <QueryProvider>
