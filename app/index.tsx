@@ -63,41 +63,14 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 24,
   },
-  titleContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
-  },
-  titleText: {
-    fontSize: 36,
-    fontWeight: "600",
-    marginBottom: 16,
-  },
   section: {
     marginBottom: 24,
     gap: 16,
-  },
-  sectionHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingHorizontal: 20,
-    marginBottom: 16,
   },
   sectionTitle: {
     fontSize: 16,
     fontWeight: "600",
     color: theme.colorTextPrimary,
-  },
-  seeAllButton: {
-    fontSize: 14,
-    fontWeight: "600",
-    color: theme.colorPrimary,
-  },
-  balanceText: {
-    fontWeight: "600",
-    fontSize: 36,
-    marginBottom: 24,
   },
   quickActionsContainer: {
     flexDirection: "row",

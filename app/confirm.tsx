@@ -5,7 +5,6 @@ import { RecipientCard } from "@/components/recipient-card";
 import { theme } from "@/constants/theme";
 import { useBiometric } from "@/hooks/use-biometric";
 import { useTransferMutation } from "@/hooks/use-transfer-mutation";
-import { useAccountStore } from "@/stores/useAccountStore";
 import { useRecipientStore } from "@/stores/useRecipientStore";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import * as Haptics from "expo-haptics";
@@ -19,12 +18,6 @@ export default function ConfirmScreen() {
   const recipientId = String(params.recipientId) || "Unknown ID";
   const amount = Number(params.amount || "0");
   const note = String(params.note) || "";
-
-  const deductBalance = useAccountStore((state) => state.deductBalance);
-  const addTransaction = useAccountStore((state) => state.addTransaction);
-  const updateTxnStatus = useAccountStore(
-    (state) => state.updateTransactionStatus
-  );
 
   const getRecipientById = useRecipientStore((state) => state.getRecipientById);
   const recipient = getRecipientById(recipientId);

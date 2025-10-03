@@ -16,6 +16,7 @@ export type Recipient = {
 type RecipientState = {
   recipients: Recipient[];
 
+  // NOTE: Some of the methods below are not used in the app but are provided for completeness
   addRecipient: (
     recipient: Omit<Recipient, "id" | "totalTransactions" | "isFavorite">
   ) => string;
